@@ -1,451 +1,570 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>BIG DREAM</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        /* =========================================
-           GLOBAL STYLES
-           ========================================= */
-        :root {
-            --primary-gold: #d4af37;
-            --primary-green: #00e676; 
-            --header-yellow: #ffd700;
-            --bg-dark: #0a0a0a;
-            --card-glass: rgba(30, 30, 30, 0.6);
-            --border-glass: rgba(255, 255, 255, 0.1);
-            --sidebar-bg: #151515;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FF KEY WEB - Premium Digital Keys</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #0f0c20;
+      --card-bg: rgba(25, 20, 50, 0.7);
+      --red: #ff3366;
+      --yellow: #ffcc00;
+      --pink: #ff66cc;
+      --grad-main: linear-gradient(135deg, #ff3366, #ffcc00, #ff66cc);
+      --grad-btn: linear-gradient(45deg, #ff0055, #7a00ff);
+      --text: #ffffff;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        body { 
-            background: radial-gradient(circle at top center, #1a2c2c, #000000 60%);
-            color: white; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; 
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        .app-container {
-            width: 100%; max-width: 414px; 
-            background: transparent;
-            position: relative; padding-bottom: 80px; min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            overflow: hidden; 
-        }
+    body {
+      background: var(--bg-color);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
 
-        /* --- CUSTOMER SUPPORT FLOATING BUTTON --- */
-        .floating-cs-btn {
-            position: absolute;
-            bottom: 100px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #42e695 0%, #3bb2b8 100%);
-            border-radius: 50%;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(66, 230, 149, 0.4);
-            z-index: 400;
-            cursor: pointer;
-            border: 2px solid #fff;
-            touch-action: none;
-            transition: transform 0.1s;
-        }
-        .floating-cs-btn:active { transform: scale(0.95); }
-        .cs-icon { font-size: 28px; color: white; }
+    #loader-wrapper {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--bg-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
 
-        /* =========================================
-           AUTH (LOGIN/REGISTER) STYLES
-           ========================================= */
-        #auth-section {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 5000; padding: 30px;
-            display: flex; flex-direction: column; justify-content: center;
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://img.freepik.com/free-vector/gradient-background-vector-play-button-icon_53876-117531.jpg');
-            background-size: cover; background-position: center;
-        }
+    .spinner-3d {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      perspective: 800px;
+    }
 
-        .auth-card {
-            background: rgba(20, 20, 20, 0.9);
-            border: 1px solid var(--primary-gold);
-            border-radius: 20px; padding: 25px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
-        }
+    .inner-spin {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 6px solid transparent;
+      border-top-color: var(--red);
+      border-right-color: var(--yellow);
+      border-bottom-color: var(--pink);
+      animation: spin3d 1.2s infinite linear;
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+    }
 
-        .auth-logo { text-align: center; margin-bottom: 20px; font-size: 28px; font-weight: 900; color: var(--header-yellow); letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-        .auth-title { text-align: center; margin-bottom: 20px; font-size: 18px; color: #ccc; }
-        
-        .auth-input-group { margin-bottom: 15px; position: relative; }
-        .auth-input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary-gold); }
-        
-        .auth-input { 
-            width: 100%; padding: 14px 45px 14px 45px; 
-            background: #111; border: 1px solid #333; 
-            color: #fff; border-radius: 10px; outline: none; transition: 0.3s; 
-        }
-        .auth-input:focus { border-color: var(--primary-gold); box-shadow: 0 0 8px rgba(212, 175, 55, 0.3); }
+    @keyframes spin3d {
+      0% { transform: rotateX(35deg) rotateY(45deg) rotateZ(0deg); }
+      100% { transform: rotateX(35deg) rotateY(45deg) rotateZ(360deg); }
+    }
 
-        .toggle-pass { position: absolute; right: 15px !important; left: auto !important; cursor: pointer; color: #666 !important; }
-        .toggle-pass:hover { color: var(--primary-gold) !important; }
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background: rgba(15, 12, 32, 0.95);
+      border-left: 1px solid rgba(255,255,255,0.1);
+      border-right: 1px solid rgba(255,255,255,0.1);
+      padding: 20px;
+      position: relative;
+    }
 
-        .auth-btn {
-            width: 100%; padding: 15px; background: linear-gradient(90deg, #d4af37, #f59e0b);
-            border: none; border-radius: 10px; color: #000; font-weight: 800; font-size: 16px;
-            cursor: pointer; margin-top: 10px; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
-        }
-        .auth-link { text-align: center; margin-top: 15px; font-size: 13px; color: #888; }
-        .auth-link span { color: var(--primary-gold); cursor: pointer; font-weight: bold; }
+    .auth-box, .page {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
 
-        #app-content { display: none; }
+    .auth-box.active, .page.active {
+      display: block;
+    }
 
-        /* =========================================
-           HEADER & NAVIGATION STYLES
-           ========================================= */
-        header { 
-            display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; 
-            background: #121212; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #333; 
-        }
-        .header-left { display: flex; align-items: center; gap: 15px; }
-        .menu-btn { font-size: 24px; color: white; cursor: pointer; }
-        .user-greeting { font-size: 18px; font-weight: 700; color: white; letter-spacing: 0.5px; }
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .bell-icon { font-size: 20px; color: white; cursor: pointer; position: relative; }
-        
-        .header-wallet-btn {
-            background-color: var(--header-yellow); color: #000; padding: 6px 12px; border-radius: 6px;
-            display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; cursor: pointer;
-            box-shadow: 0 2px 5px rgba(255, 215, 0, 0.3);
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        .page { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      background: var(--grad-main);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 24px;
+    }
 
-        .input-group-bonus { text-align: left; margin-bottom: 15px; }
-        .input-group-bonus label { color: #aaa; font-size: 12px; display: block; margin-bottom: 5px; }
-        .bonus-input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #fff; outline: none; }
-        
-        .btn-submit-utr { width: 100%; padding: 15px; background: linear-gradient(90deg, #00e676, #059669); border: none; border-radius: 8px; color: white; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.3); margin-top: 20px; }
+    .input-group {
+      margin-bottom: 15px;
+    }
 
-        .navbar { 
-            position: fixed; bottom: 0; width: 100%; max-width: 414px; 
-            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px);
-            border-top: 1px solid #333; display: flex; justify-content: space-around; padding: 15px 0; z-index: 100;
-        }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: #666; cursor: pointer; text-decoration: none; font-size: 12px; background: none; border: none; }
-        .nav-item.active { color: var(--primary-gold); }
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
 
-        #toast { visibility: hidden; min-width: 250px; background-color: rgba(30,30,30,0.95); color: #fff; text-align: center; border-radius: 10px; padding: 16px; position: fixed; z-index: 3000; left: 50%; bottom: 100px; transform: translateX(-50%); font-size: 14px; border: 1px solid #444; }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 100px; opacity: 1; } }
-        @keyframes fadeout { from { bottom: 100px; opacity: 1; } to { bottom: 0; opacity: 0; } }
-    </style>
+    .btn-main {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: var(--grad-btn);
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);
+      transition: 0.3s;
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-main:active { transform: scale(0.98); }
+
+    .toggle-link {
+      text-align: center;
+      margin-top: 15px;
+      color: var(--pink);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .dashboard-header {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+    }
+
+    .grid-menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .full-width { grid-column: span 2; }
+
+    .grid-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: 0.2s;
+    }
+
+    .grid-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--pink);
+    }
+
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .product-item {
+      background: rgba(255,255,255,0.05);
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-item:hover { border-color: var(--yellow); }
+
+    .payment-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .qr-img {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+      margin: 15px 0;
+      border: 3px solid var(--pink);
+      object-fit: cover;
+    }
+
+    .timer-badge {
+      background: rgba(255,0,0,0.2);
+      color: #ff4444;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .support-btn {
+      position: fixed;
+      bottom: 15px;
+      right: 15px;
+      background: #0088cc;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 100;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <!-- LOGIN / REGISTER SECTION -->
-        <div id="auth-section">
-            <div id="login-page" class="auth-card">
-                <div class="auth-logo">BIG DREAM</div>
-                <div class="auth-title">Login to your account</div>
-                <div class="auth-input-group">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="login-id" class="auth-input" placeholder="Phone Number or Email">
-                </div>
-                <div class="auth-input-group">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="login-pass" class="auth-input" placeholder="Password">
-                </div>
-                <button class="auth-btn" onclick="handleLogin()">LOGIN</button>
-                <div class="auth-link">Don't have an account? <span onclick="switchAuth('register')">Register Now</span></div>
-            </div>
+  <!-- 3D Loader -->
+  <div id="loader-wrapper">
+    <div class="spinner-3d">
+      <div class="inner-spin"></div>
+    </div>
+    <p style="margin-top: 15px; font-weight: 500;">Loading FF KEY WEB...</p>
+  </div>
 
-            <div id="register-page" class="auth-card" style="display:none;">
-                <div class="auth-logo">BIG DREAM</div>
-                <div class="auth-title">Create a new account</div>
-                <div class="auth-input-group">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="reg-name" class="auth-input" placeholder="Full Name">
-                </div>
-                <div class="auth-input-group">
-                    <i class="fa-solid fa-envelope"></i>
-                    <input type="text" id="reg-contact" class="auth-input" placeholder="Phone or Email">
-                </div>
-                <div class="auth-input-group">
-                    <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="reg-pass" class="auth-input" placeholder="Password">
-                </div>
-                <button class="auth-btn" onclick="handleRegister()">REGISTER</button>
-                <div class="auth-link">Already have an account? <span onclick="switchAuth('login')">Login Here</span></div>
-            </div>
-        </div>
+  <div class="app-container">
 
-        <!-- MAIN APPLICATION CONTENT -->
-        <div id="app-content">
-
-            <header id="main-header">
-                <div class="header-left">
-                    <span class="user-greeting" id="header-greeting">Hi, User</span>
-                </div>
-                <div class="header-right">
-                    <div class="header-wallet-btn" onclick="showPage('wallet')">
-                        <i class="fa-solid fa-wallet"></i> ₹<span id="displayBalance">0.00</span>
-                    </div>
-                </div>
-            </header>
-
-            <!-- HOME PAGE -->
-            <div id="home" class="page active">
-                <h2 style="margin-bottom: 20px;">Welcome to Big Dream</h2>
-                <div style="background: rgba(30, 30, 30, 0.6); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);">
-                    <h3>Game Control Active</h3>
-                    <p style="color: #aaa; margin-top: 10px; font-size: 14px;">Results are synchronized directly via Telegram Admin Bot.</p>
-                </div>
-            </div>
-
-            <!-- WALLET / DEPOSIT & WITHDRAW PAGE -->
-            <div id="wallet" class="page">
-                <h2 style="margin-bottom:20px;">Wallet Transactions</h2>
-
-                <!-- Deposit Form -->
-                <div style="background: #152438; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3>Deposit Funds</h3>
-                    <div class="input-group-bonus">
-                        <label>Enter UTR No :</label>
-                        <input type="text" id="dep-utr" class="bonus-input" placeholder="12 Digit UTR">
-                    </div>
-                    <div class="input-group-bonus">
-                        <label>Enter UID :</label>
-                        <input type="text" id="dep-uid" class="bonus-input" placeholder="Your UID">
-                    </div>
-                    <div class="input-group-bonus">
-                        <label>Enter Gmail :</label>
-                        <input type="email" id="dep-gmail" class="bonus-input" placeholder="Your Email">
-                    </div>
-                    <div class="input-group-bonus">
-                        <label>Enter Username :</label>
-                        <input type="text" id="dep-username" class="bonus-input" placeholder="Your Name">
-                    </div>
-                    <button class="btn-submit-utr" onclick="submitDeposit()">SUBMIT ✅</button>
-                </div>
-
-                <!-- Withdrawal Form -->
-                <div style="background: #152438; padding: 15px; border-radius: 10px;">
-                    <h3>Withdraw Funds</h3>
-                    <div class="input-group-bonus">
-                        <label>Enter Name :</label>
-                        <input type="text" id="wit-name" class="bonus-input" placeholder="Account Holder Name">
-                    </div>
-                    <div class="input-group-bonus">
-                        <label>Enter Bank Name :</label>
-                        <input type="text" id="wit-bank" class="bonus-input" placeholder="Bank Name">
-                    </div>
-                    <div class="input-group-bonus">
-                        <label>Enter Account No :</label>
-                        <input type="text" id="wit-acc" class="bonus-input" placeholder="Account Number">
-                    </div>
-                    <div class="input-group-bonus">
-                        <label>Enter IFSC Code :</label>
-                        <input type="text" id="wit-ifsc" class="bonus-input" placeholder="IFSC Code">
-                    </div>
-                    <div class="input-group-bonus">
-                        <label>Enter Phone Number :</label>
-                        <input type="text" id="wit-phone" class="bonus-input" placeholder="Phone Number">
-                    </div>
-                    <button class="btn-submit-utr" style="background: linear-gradient(90deg, #ea5455, #c0392b);" onclick="submitWithdrawal()">SUBMIT ✅</button>
-                </div>
-            </div>
-
-            <!-- NAVBAR -->
-            <div class="navbar">
-                <button class="nav-item active" onclick="showPage('home')"><i class="fa-solid fa-house"></i><span>Home</span></button>
-                <button class="nav-item" onclick="showPage('wallet')"><i class="fa-solid fa-wallet"></i><span>Wallet</span></button>
-            </div>
-
-        </div>
-
-        <div id="toast">Toast Message</div>
+    <!-- LOGIN PAGE -->
+    <div id="page-login" class="auth-box active">
+      <h2><i class="fa-solid fa-lock"></i> LOGIN</h2>
+      <div class="input-group">
+        <input type="text" id="login-user" placeholder="Username / Email / Phone">
+      </div>
+      <div class="input-group">
+        <input type="password" id="login-pass" placeholder="Password">
+      </div>
+      <button class="btn-main" onclick="handleLogin()">LOGIN</button>
+      <div class="toggle-link" onclick="switchAuth('register')">Don't have an account? Register</div>
     </div>
 
-    <!-- Firebase & Bot Sync Script -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <!-- REGISTER PAGE -->
+    <div id="page-register" class="auth-box">
+      <h2><i class="fa-solid fa-user-plus"></i> REGISTER</h2>
+      <div class="input-group"><input type="text" id="reg-user" placeholder="Username"></div>
+      <div class="input-group"><input type="email" id="reg-email" placeholder="Email"></div>
+      <div class="input-group"><input type="tel" id="reg-phone" placeholder="Phone Number"></div>
+      <div class="input-group"><input type="password" id="reg-pass" placeholder="Create Password"></div>
+      <div class="input-group"><input type="password" id="reg-repass" placeholder="Retype Password"></div>
+      <button class="btn-main" onclick="handleRegister()">REGISTER</button>
+      <div class="toggle-link" onclick="switchAuth('login')">Already have an account? Login</div>
+    </div>
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyD4YcgCzfTtmp5SL39EFC6ViLIfwgJvuNo",
-            authDomain: "big-deram.firebaseapp.com",
-            projectId: "big-deram",
-            storageBucket: "big-deram.firebasestorage.app",
-            messagingSenderId: "532368567974",
-            appId: "1:532368567974:web:ee7eceafa93c7b79fd0e67"
-        };
+    <!-- MAIN DASHBOARD -->
+    <div id="page-dashboard" class="page">
+      <div class="dashboard-header">
+        <h3>🏪 WELCOME FF KEY WEB 🏪</h3>
+        <p style="margin-top: 8px;">👋 Hello, <b id="dash-username" style="color: var(--yellow);">User</b>!</p>
+        <p style="font-size: 13px; color: #bbb; margin-top: 4px;">🔑 Premium digital keys, instant delivery.</p>
+      </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+      <div class="grid-menu">
+        <button class="grid-btn full-width" style="background: var(--grad-btn);" onclick="openStore()">
+          <i class="fa-solid fa-cart-shopping"></i> SHOP
+        </button>
+        <button class="grid-btn" onclick="openAddBalance()"><i class="fa-solid fa-wallet"></i> ADD BALANCE</button>
+        <button class="grid-btn" onclick="openRootDevice()"><i class="fa-solid fa-mobile-screen"></i> ROOT DEVICE</button>
+        <button class="grid-btn" onclick="openProfile()"><i class="fa-solid fa-user"></i> PROFILE</button>
+        <button class="grid-btn" onclick="openReferral()"><i class="fa-solid fa-gift"></i> REFERRAL</button>
+        <button class="grid-btn" onclick="spinToWin()"><i class="fa-solid fa-compass"></i> SPIN</button>
+        <button class="grid-btn" onclick="openOrders()"><i class="fa-solid fa-file-invoice"></i> MY ORDER</button>
+      </div>
+    </div>
 
-        // TELEGRAM BOT CONFIGURATION
-        const BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"; // Apne Telegram Bot ka Token Daalein
-        const ADMIN_CHAT_ID = "YOUR_ADMIN_CHAT_ID";   // Apni Telegram Chat ID Daalein
+    <!-- STORE (SHOP) PAGE -->
+    <div id="page-store" class="page">
+      <h2>🛍️ THOR X STORE</h2>
+      <p style="text-align: center; font-size: 13px; margin-bottom: 12px; color: #aaa;">Pick a product:</p>
+      
+      <div class="product-list" id="product-list"></div>
+      
+      <button class="btn-main" style="background: #333; margin-top: 15px;" onclick="navTo('dashboard')">↩️ BACK</button>
+    </div>
 
-        window.showToast = function(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.className = "show";
-            setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000);
-        };
+    <!-- PLAN SELECTOR PAGE -->
+    <div id="page-plans" class="page">
+      <h3 id="selected-product-title" style="text-align: center; color: var(--yellow);">Product Name</h3>
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 14px; line-height: 1.6;">
+        📊 <b>STOCK & PRICING:</b><br>
+        ✅ 1 Day — 📦 Stock: In Stock — 💰 Price: ₹180 rs<br>
+        ✅ 7 Days — 📦 Stock: In Stock — 💰 Price: ₹470 rs<br>
+        ✅ 30 Days — 📦 Stock: In Stock — 💰 Price: ₹1400 rs<br>
+        ✅ 90 Days — 📦 Stock: In Stock — 💰 Price: ₹2000 rs
+      </div>
 
-        window.showPage = function(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-        };
+      <p style="font-weight: bold; margin-bottom: 10px;">🎯 SELECT YOUR PLAN:</p>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <button class="grid-btn" onclick="initiatePayment(180, '1 Day')">🗝️ 1 Day - ₹180 rs</button>
+        <button class="grid-btn" onclick="initiatePayment(470, '7 Days')">🗝️ 7 Days - ₹470 rs</button>
+        <button class="grid-btn" onclick="initiatePayment(1400, '30 Days')">🗝️ 30 Days - ₹1400 rs</button>
+        <button class="grid-btn" onclick="initiatePayment(2200, '90 Days')">🗝️ 90 Days - ₹2200 rs</button>
+        <button class="btn-main" style="background: #333;" onclick="navTo('store')">↩️ BACK</button>
+      </div>
+    </div>
 
-        window.switchAuth = function(type) {
-            if(type === 'register') {
-                document.getElementById('login-page').style.display = 'none';
-                document.getElementById('register-page').style.display = 'block';
-            } else {
-                document.getElementById('register-page').style.display = 'none';
-                document.getElementById('login-page').style.display = 'block';
-            }
-        };
+    <!-- ADD BALANCE PAGE -->
+    <div id="page-balance" class="page">
+      <h2>[ ONLY RESELLER ] 🛒</h2>
+      <p style="text-align: center; font-size: 13px; margin-bottom: 15px;">Choose Balance Amount:</p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <button class="grid-btn" onclick="initiatePayment(1000, 'Add Balance')">1000 rs. 💸</button>
+        <button class="grid-btn" onclick="initiatePayment(1400, 'Add Balance')">1400 rs. 💸</button>
+        <button class="grid-btn" onclick="initiatePayment(1700, 'Add Balance')">1700 rs. 💸</button>
+        <button class="grid-btn" onclick="initiatePayment(2000, 'Add Balance')">2000 rs. 💸</button>
+        <button class="btn-main" style="background: #333;" onclick="navTo('dashboard')">↩️ BACK</button>
+      </div>
+    </div>
 
-        // Telegram Forwarder Function
-        async function sendTelegramNotification(message) {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            try {
-                await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: ADMIN_CHAT_ID,
-                        text: message,
-                        parse_mode: 'HTML'
-                    })
-                });
-            } catch(e) {
-                console.error("Telegram Notification Error:", e);
-            }
+    <!-- ROOT DEVICE PAGE -->
+    <div id="page-root-device" class="page">
+      <h2>🖥️ ROOT DEVICE</h2>
+      <div style="text-align: center; margin: 20px 0;">
+        <p style="font-size: 18px; font-weight: bold;">900 rs Professional ROOT ✅</p>
+      </div>
+      <button class="btn-main" onclick="initiatePayment(900, 'Professional ROOT')">Proceed to Pay ₹900</button>
+      <button class="btn-main" style="background: #333;" onclick="navTo('dashboard')">↩️ BACK</button>
+    </div>
+
+    <!-- PAYMENT PAGE -->
+    <div id="page-payment" class="page">
+      <div class="payment-card">
+        <h3>💳 UPI PAYMENT</h3>
+        <p style="font-size: 12px; color: #aaa;">━━━━━━━━━━━━━━━━━━━━</p>
+        <div class="timer-badge">⏱️ Valid for: <span id="timer">05:00</span></div>
+        <br>
+        <img src="https://i.ibb.co/N23TDVPZ/qrcode-1.jpg" id="qr-code-img" class="qr-img" alt="UPI QR Code">
+        
+        <div style="text-align: left; font-size: 13px; line-height: 1.8; margin-top: 10px;">
+          — 💵 <b>Amount:</b> ₹<span id="pay-amount">0</span> INR<br>
+          — 🆔 <b>Order:</b> #<span id="pay-order-id">000000</span><br>
+          — 📝 <b>UPI ID:</b> <code style="color: var(--yellow);">aadi952@ybl</code><br>
+          <br>
+          <b>📲 How to pay:</b><br>
+          1️⃣ Scan the QR with any UPI app<br>
+          2️⃣ Pay exactly ₹<span id="pay-amount-2">0</span> INR<br>
+          3️⃣ Wait — keys auto-deliver in seconds
+        </div>
+
+        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 8px;">
+          <button class="grid-btn" style="background: #28a745;" onclick="handlePaid()">I ✅ PAID 💰</button>
+          <button class="grid-btn" style="background: #dc3545;" onclick="handleNotPaid()">I 🚫 PAID 💰</button>
+          <button class="btn-main" style="background: #333;" onclick="navTo('dashboard')">↩️ BACK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div id="page-profile" class="page">
+      <h2>🧑🏻‍🦲 MY PROFILE</h2>
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; line-height: 2;">
+        <p>🆔 <b>Username:</b> <span id="prof-user">Karan</span></p>
+        <p>💲 <b>Balance:</b> ₹<span id="prof-bal">0</span></p>
+        <p>📅 <b>Join Date:</b> <span id="prof-date">14/08/2026</span></p>
+        <p>🔑 <b>Total Keys Bought:</b> <span id="prof-keys">0</span></p>
+        <p>✈️ <b>Total Referrals:</b> <span id="prof-ref">0</span></p>
+      </div>
+      <button class="btn-main" style="background: #333; margin-top: 15px;" onclick="navTo('dashboard')">↩️ BACK</button>
+    </div>
+
+    <!-- REFERRAL PAGE -->
+    <div id="page-referral" class="page">
+      <h2>🎁 REFERRAL PROGRAM</h2>
+      <p style="text-align: center; margin-bottom: 15px;">Share your code & earn rewards!</p>
+      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; text-align: center;">
+        <p>Your Referral Code:</p>
+        <h3 id="ref-code-display" style="color: var(--yellow); letter-spacing: 2px; margin: 10px 0;">REF12345</h3>
+      </div>
+      <button class="btn-main" style="background: #333; margin-top: 15px;" onclick="navTo('dashboard')">↩️ BACK</button>
+    </div>
+
+    <!-- MY ORDERS PAGE -->
+    <div id="page-orders" class="page">
+      <h2>📄 MY ORDERS</h2>
+      <div id="orders-container" style="font-size: 14px; color: #aaa; text-align: center; margin-top: 20px;">
+        No active keys found.
+      </div>
+      <button class="btn-main" style="background: #333; margin-top: 20px;" onclick="navTo('dashboard')">↩️ BACK</button>
+    </div>
+
+  </div>
+
+  <a href="https://t.me/Karan_Thore" target="_blank" class="support-btn">
+    <i class="fa-brands fa-telegram"></i> Support
+  </a>
+
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader-wrapper').style.opacity = '0';
+        setTimeout(() => document.getElementById('loader-wrapper').style.display = 'none', 500);
+      }, 800);
+    });
+
+    let currentUser = null;
+    let timerInterval = null;
+    let selectedPlanPrice = 0;
+
+    const products = [
+      "🗝️ DRIP CLIENT NON ROOT", "🗝️ PATO TEAM NON ROOT", "🗝️ HG CHEATS NON ROOT",
+      "🗝️ SILENT CHEST NON ROOT", "🗝️ PRIME HOOK NON ROOT", "🗝️ THOR X BODY NON ROOT",
+      "🗝️ 70 Hs And Hologram NON ROOT", "🗝️ DRIP ROOT", "🗝️ PATO TEAM ROOT",
+      "🗝️ DARK X STREAM ROOT", "🗝️ BOYAAH ROOT", "🗝️ HAXXER PRO ROOT",
+      "🗝️ BR MOD ROOT", "🗝️ RAPID CORE ROOT", "🗝️ DRIP PROXY ROOT",
+      "🗝️ SILENT CHEST ROOT", "🗝️ COPID ROOT", "🗝️ HAXXER PRO NON ROOT",
+      "🗝️ DRIP PROXY NON ROOT", "🗝️ P200 KING ROOT", "🗝️ LK TEAM PC", "🗝️ BR MOD NON ROOT"
+    ];
+
+    function navTo(pageId) {
+      document.querySelectorAll('.auth-box, .page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + pageId).classList.add('active');
+    }
+
+    function switchAuth(type) { navTo(type); }
+
+    function handleLogin() {
+      const u = document.getElementById('login-user').value;
+      const p = document.getElementById('login-pass').value;
+
+      if(u === "KARAN ADMIN" && p === "ADMIN1111") {
+        alert("Welcome Admin!");
+        currentUser = "KARAN ADMIN";
+      } else {
+        currentUser = u || "User";
+      }
+
+      document.getElementById('dash-username').innerText = currentUser;
+      document.getElementById('prof-user').innerText = currentUser;
+      navTo('dashboard');
+    }
+
+    function handleRegister() {
+      const pass = document.getElementById('reg-pass').value;
+      const repass = document.getElementById('reg-repass').value;
+      if(pass !== repass) {
+        alert("Passwords do not match!");
+        return;
+      }
+      currentUser = document.getElementById('reg-user').value || "User";
+      document.getElementById('dash-username').innerText = currentUser;
+      navTo('dashboard');
+    }
+
+    function openStore() {
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+      products.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-item';
+        div.innerHTML = `<span>${p}</span> <i class="fa-solid fa-chevron-right"></i>`;
+        div.onclick = () => selectProduct(p);
+        container.appendChild(div);
+      });
+      navTo('store');
+    }
+
+    function selectProduct(name) {
+      document.getElementById('selected-product-title').innerText = name;
+      navTo('plans');
+    }
+
+    function openAddBalance() { navTo('balance'); }
+    function openRootDevice() { navTo('root-device'); }
+
+    function initiatePayment(amount, planName) {
+      selectedPlanPrice = amount;
+      document.getElementById('pay-amount').innerText = amount;
+      document.getElementById('pay-amount-2').innerText = amount;
+      document.getElementById('pay-order-id').innerText = Math.floor(100000 + Math.random() * 900000);
+      
+      const upiId = "aadi952@ybl";
+      const upiUrl = `upi://pay?pa=${upiId}&pn=KaranStore&am=${amount}&cu=INR`;
+      const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUrl)}`;
+      
+      // Auto Update QR Image
+      document.getElementById('qr-code-img').src = qrApi;
+      
+      navTo('payment');
+      startTimer(300);
+    }
+
+    function startTimer(duration) {
+      clearInterval(timerInterval);
+      let timer = duration, minutes, seconds;
+      timerInterval = setInterval(() => {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        document.getElementById('timer').innerText = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+          clearInterval(timerInterval);
+          alert("Payment Timer Expired!");
+          navTo('dashboard');
         }
+      }, 1000);
+    }
 
-        // Deposit Handler
-        window.submitDeposit = async function() {
-            const utr = document.getElementById('dep-utr').value;
-            const uid = document.getElementById('dep-uid').value;
-            const gmail = document.getElementById('dep-gmail').value;
-            const username = document.getElementById('dep-username').value;
+    function handlePaid() {
+      alert("WAIT FOR CHECK ADMIN ⚡");
+      navTo('dashboard');
+    }
 
-            if(!utr || !uid || !gmail || !username) {
-                showToast("Please fill all Deposit details!");
-                return;
-            }
+    function handleNotPaid() { navTo('plans'); }
+    function openProfile() { navTo('profile'); }
+    
+    function openReferral() { 
+      document.getElementById('ref-code-display').innerText = "REF" + Math.floor(10000 + Math.random() * 90000);
+      navTo('referral'); 
+    }
 
-            const message = `<b>🎫 Deposit Request Received</b>\n\n` +
-                            `🎫 UTR no : ${utr}\n` +
-                            `🚇 UID : ${uid}\n` +
-                            `👾 Gmail : ${gmail}\n` +
-                            `👤 Username : ${username}\n` +
-                            `⏰ Deposit Time : ${new Date().toLocaleString()}`;
+    function spinToWin() {
+      const outcomes = ["YOUR LUCK IS BAD 😞 TRY TOMORROW", "You won ₹1!"];
+      const res = outcomes[Math.floor(Math.random() * outcomes.length)];
+      alert("🧭 Daily Spin Result: " + res);
+    }
 
-            await sendTelegramNotification(message);
-            showToast("Deposit Request Submitted ✅");
-            
-            document.getElementById('dep-utr').value = '';
-            document.getElementById('dep-uid').value = '';
-            document.getElementById('dep-gmail').value = '';
-            document.getElementById('dep-username').value = '';
-        };
-
-        // Withdrawal Handler
-        window.submitWithdrawal = async function() {
-            const name = document.getElementById('wit-name').value;
-            const bank = document.getElementById('wit-bank').value;
-            const acc = document.getElementById('wit-acc').value;
-            const ifsc = document.getElementById('wit-ifsc').value;
-            const phone = document.getElementById('wit-phone').value;
-
-            if(!name || !bank || !acc || !ifsc || !phone) {
-                showToast("Please fill all Withdrawal details!");
-                return;
-            }
-
-            const message = `<b>🟥 Withdrawal Request Received</b>\n\n` +
-                            `👤 Name : ${name}\n` +
-                            `🏦 Bank Name : ${bank}\n` +
-                            `💳 Account No : ${acc}\n` +
-                            `🏧 IFSC CODE : ${ifsc}\n` +
-                            `📱 Number : ${phone}\n` +
-                            `⏰ Time : ${new Date().toLocaleString()}`;
-
-            await sendTelegramNotification(message);
-            showToast("Withdrawal Request Submitted ✅");
-
-            document.getElementById('wit-name').value = '';
-            document.getElementById('wit-bank').value = '';
-            document.getElementById('wit-acc').value = '';
-            document.getElementById('wit-ifsc').value = '';
-            document.getElementById('wit-phone').value = '';
-        };
-
-        // User Login
-        window.handleLogin = async function() {
-            const id = document.getElementById('login-id').value;
-            const pass = document.getElementById('login-pass').value;
-
-            if(!id || !pass) { showToast("Please fill all fields"); return; }
-
-            try {
-                const q = query(collection(db, "users"), where("contact", "==", id), where("password", "==", pass));
-                const snap = await getDocs(q);
-
-                if (!snap.empty) {
-                    const userData = snap.docs[0].data();
-                    document.getElementById('auth-section').style.display = 'none';
-                    document.getElementById('app-content').style.display = 'block';
-                    document.getElementById('header-greeting').innerText = "Hi, " + userData.name;
-                    document.getElementById('displayBalance').innerText = (userData.wallet?.deposit || 0).toFixed(2);
-                    showToast("Login Successful!");
-                } else {
-                    showToast("Invalid Credentials!");
-                }
-            } catch(e) {
-                showToast("Login Error");
-            }
-        };
-
-        // User Register
-        window.handleRegister = async function() {
-            const name = document.getElementById('reg-name').value;
-            const contact = document.getElementById('reg-contact').value;
-            const pass = document.getElementById('reg-pass').value;
-
-            if(!name || !contact || !pass) { showToast("Please fill all fields"); return; }
-
-            try {
-                const uid = Math.floor(Math.random() * 899999 + 100000).toString();
-                await setDoc(doc(db, "users", uid), {
-                    name: name,
-                    contact: contact,
-                    password: pass,
-                    uid: uid,
-                    wallet: { deposit: 0, winning: 0, bonus: 0 },
-                    createdAt: new Date().toISOString()
-                });
-                showToast("Registration Successful! Please Login.");
-                switchAuth('login');
-            } catch(e) {
-                showToast("Registration Error");
-            }
-        };
-    </script>
+    function openOrders() { navTo('orders'); }
+  </script>
 </body>
 </html>
